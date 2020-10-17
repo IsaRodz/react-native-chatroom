@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "660040631410",
+    "firebase_url": "https://chat-app-792e9.firebaseio.com",
+    "project_id": "chat-app-792e9",
+    "storage_bucket": "chat-app-792e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660040631410:android:2f5397c0e70137a4ea6eeb",
+        "android_client_info": {
+          "package_name": "com.reactnative.chatroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660040631410-dpkh9m6h0bsl3bl8s9qvgk2tk76ui8e7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAenndB11qnh0M9St4vQtubDc-9phuxyO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660040631410-dpkh9m6h0bsl3bl8s9qvgk2tk76ui8e7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
