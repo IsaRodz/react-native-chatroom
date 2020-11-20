@@ -68,36 +68,16 @@ const Chat = () => {
             </MessageContainer>
           ))}
       </ScrollView>
-      <View
-        style={{
-          borderRadius: 25,
-          backgroundColor: "#f4f4f4",
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <TextInput
+      <InputContainer>
+        <Input
           value={text}
           onChangeText={(value) => setText(value)}
           placeholder="Type a message..."
-          style={{ padding: 10, paddingLeft: 20, flex: 1 }}
         />
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderColor: "#2196F3",
-            borderWidth: 1,
-            borderStyle: "solid",
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-          }}
-          onPress={() => handlePress()}
-        >
-          <Feather name="send" size={16} color="#2196F3" />
-        </TouchableOpacity>
-      </View>
+        <SendButton onPress={handlePress}>
+          <Feather name="send" size={16} color="#fff" />
+        </SendButton>
+      </InputContainer>
     </View>
   );
 };
@@ -128,6 +108,26 @@ const Message = styled(Text)`
       return "margin-left: 5px";
     }
   }};
+`;
+
+const InputContainer = styled.View`
+  border-radius: 25px;
+  background-color: #efefef;
+  flex-direction: row;
+`;
+
+const Input = styled.TextInput`
+  padding: 10px 10px 10px 20px;
+  flex: 1;
+`;
+
+const SendButton = styled.TouchableOpacity`
+  justify-content: center;
+  align-items: center;
+  background-color: #2196f3;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
 `;
 
 export default Chat;
