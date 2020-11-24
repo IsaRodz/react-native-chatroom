@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Button, View, StatusBar } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 
@@ -9,12 +9,20 @@ import Chat from "./components/Chat";
 export default function App() {
   const [user, loading] = useAuthState(auth);
 
-  return (
-    <View style={styles.container}>
-      {user ? <Chat /> : <SignIn />}
-      <StatusBar backgroundColor="#ddd" barStyle="dark-content" />
-    </View>
-  );
+  if (loading)
+    return (
+      <View
+        style={[
+          styles.container,
+          { alignItems: "center", justifyContent: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#212121" />
+        <Text style={{ marginTop: 16 }}>Loading...</Text>
+      </View>
+    );
+
+  return <View style={styles.container}>{user ? <Chat /> : <SignIn />}</View>;
 }
 
 const styles = StyleSheet.create({

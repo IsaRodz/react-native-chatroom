@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import {
-  Dimensions,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import React, { useState, useEffect, useRef } from "react";
+import { Dimensions, Keyboard, Text, View } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
 import firebase, { auth, firestore } from "../firebase";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import SignOut from "./SignOut";
 import { Avatar } from "react-native-elements";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 const Chat = () => {
+  const scrollView = useRef();
+  useEffect(() => {
+    scrollView.current.scrollToEnd({ animated: true });
+  }, []);
+
+  const handleSizeChange = () => {
+    scrollView.current.scrollToEnd({ animated: true });
+  };
+
   const messagesRef = firestore.collection("/messages");
   const query = messagesRef.orderBy("createdAt");
   const [messages] = useCollectionData(query, { idField: "id" });
@@ -33,41 +35,31 @@ const Chat = () => {
         uid: auth.currentUser.uid,
       });
       setText("");
+
+      Keyboard.dismiss();
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <View
-        style={{
-          padding: 10,
-          backgroundColor: "#f4f4f4",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "space-between",
-        }}
-      >
-        <Text style={{ fontSize: 28 }}>Chatroom</Text>
+    <Container>
+      <Header>
+        <Title>Chatroom</Title>
         <SignOut />
-      </View>
-      <ScrollView style={{ flex: 1, padding: 10, paddingBottom: 20 }}>
+      </Header>
+      <ChatContainer ref={scrollView} onContentSizeChange={handleSizeChange}>
         {messages &&
           messages.map((message) => (
             <MessageContainer
               key={message.id}
               sent={message.uid === auth.currentUser.uid}
             >
-              <Avatar
-                size="medium"
-                source={{ uri: message.photoURL }}
-                rounded
-              />
+              <Avatar source={{ uri: message.photoURL }} rounded />
               <Message sent={message.uid === auth.currentUser.uid}>
                 {message.text}
               </Message>
             </MessageContainer>
           ))}
-      </ScrollView>
+      </ChatContainer>
       <InputContainer>
         <Input
           value={text}
@@ -78,10 +70,31 @@ const Chat = () => {
           <Feather name="send" size={16} color="#fff" />
         </SendButton>
       </InputContainer>
-    </View>
+    </Container>
   );
 };
 
+const Container = styled.View`
+  padding-top: 20px;
+  flex: 1;
+`;
+const Title = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+`;
+const Header = styled.View`
+  padding: 10px;
+  background: #fff;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ChatContainer = styled.ScrollView`
+  flex: 1;
+  padding: 10px;
+  padding-bottom: 20px;
+`;
 const MessageContainer = styled.View`
   margin-bottom: 14px;
   flex-direction: ${(props) => {
@@ -98,9 +111,9 @@ const Message = styled(Text)`
   padding: 10px 18px;
   line-height: 18px;
   border-radius: 24px;
-  background-color: #2196f3;
-  color: #fff;
-  max-width: ${Dimensions.get("window").width - 100};
+  background-color: ${(props) => (props.sent ? "#f1f1f1" : "#2196f3")};
+  color: ${(props) => (props.sent ? "#000" : "#fff")};
+  max-width: ${Dimensions.get("window").width - 100}px;
   ${(props) => {
     if (props.sent === true) {
       return "margin-right: 5px";
@@ -111,13 +124,15 @@ const Message = styled(Text)`
 `;
 
 const InputContainer = styled.View`
-  border-radius: 25px;
-  background-color: #efefef;
   flex-direction: row;
+  padding: 5px;
 `;
 
 const Input = styled.TextInput`
-  padding: 10px 10px 10px 20px;
+  background-color: #efefef;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin-right: 4px;
   flex: 1;
 `;
 
